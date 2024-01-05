@@ -40,7 +40,7 @@ $ pip install -r requirements.txt
 ### Run
 
 ```bash
-$ python pipeline.py [dir] [--dry_run] [--show_unsupported_files] [--quality_check] [--order_by_date]
+$ python main.py [dir] [--dry_run] [--show_unsupported_files] [--quality_check] [--order_by_date]
 ```
 
 #### Arguments
@@ -58,7 +58,7 @@ $ python pipeline.py [dir] [--dry_run] [--show_unsupported_files] [--quality_che
 ### Example
 
 ```bash
-$ python pipeline.py /path/to/images --dry_run --show_unsupported_files --quality_check --order_by_date
+$ python main.py /path/to/images --dry_run --show_unsupported_files --quality_check --order_by_date
 ```
 
 ## Output

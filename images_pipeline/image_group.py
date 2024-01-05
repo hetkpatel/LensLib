@@ -18,7 +18,7 @@ def process(session, DEBUG):
 
     files = [
         path.join(root, f)
-        for root, _, files in walk(f"./.tmp/{session}/vectors/")
+        for root, _, files in walk(f"./.tmp/{session}/i/vectors/")
         for f in files
     ]
 
@@ -30,7 +30,7 @@ def process(session, DEBUG):
 
     if DEBUG:
         # output delta_table to a json file
-        with open(f"./.tmp/{session}/delta_table.json", "w") as f:
+        with open(f"./.tmp/{session}/i/delta_table.json", "w") as f:
             dump(delta_table, f)
 
     def get_cluster(node):
@@ -56,7 +56,7 @@ def process(session, DEBUG):
             checked.update(cluster)
 
     # save images to the .tmp/session folder in their respective groups
-    with open(f"./.tmp/{session}/embedding_map.json", "r") as em:
+    with open(f"./.tmp/{session}/i/embedding_map.json", "r") as em:
         embedding_map = load(em)
         for k, v in groups.items():
             folder = path.join(

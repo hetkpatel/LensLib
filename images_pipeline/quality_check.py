@@ -20,12 +20,13 @@ def process(session):
 
     try:
         for f in tqdm(
-            [
+            desc="Calculate Quality Score",
+            iterable=[
                 path.join(root, f)
                 for root, _, files in walk(f"./output/{session}/images")
                 for f in files
                 if _is_valid_type(path.join(root, f))
-            ]
+            ],
         ):
             try:
                 image_quality_df.loc[len(image_quality_df.index)] = [

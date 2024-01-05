@@ -18,4 +18,4 @@ class ResNet50_ImageEmbedder(nn.Module):
 
 
 def get_transforms():
-    return models.ResNet50_Weights.DEFAULT.transforms()
+    return models.ResNet50_Weights.DEFAULT.transforms(antialias=True)

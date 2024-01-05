@@ -11,11 +11,12 @@ register_heif_opener()
 
 def process(session):
     for batch in tqdm(
-        [
+        desc="Ordering groups by date",
+        iterable=[
             (path.join(f"./output/{session}/images", d), d)
             for d in listdir(f"./output/{session}/images")
             if path.isdir(f"./output/{session}/images/{d}")
-        ]
+        ],
     ):
         for root, _, files in walk(batch[0]):
             for f in files:

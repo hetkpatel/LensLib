@@ -4,10 +4,12 @@ from shutil import rmtree
 from mimetypes import guess_type
 from argparse import ArgumentParser, ArgumentTypeError
 
-import images_util.image_embed as emb
-import images_util.image_group as grp
-import images_util.quality_check as qc
-import images_util.order_date as od
+import images_pipeline.image_embed as iemb
+import images_pipeline.image_group as grp
+import images_pipeline.quality_check as qc
+import images_pipeline.order_date as od
+
+import videos_pipeline.video_embed as vemb
 
 _DEBUG = False
 
@@ -91,17 +93,28 @@ if DRY_RUN_CHECK:
 
 # START ------------------------------------------------------
 if not DRY_RUN_CHECK:
+    # Create session id
     session = uuid4().hex
     print(f"\nSession ID: {session}\n")
-    if not path.exists(f"./.tmp/{session}"):
-        makedirs(f"./.tmp/{session}")
+
+    # Make 'tmp' folder
+    if not path.exists(f"./.tmp/{session}/i"):
+        makedirs(f"./.tmp/{session}/i")
+    if not path.exists(f"./.tmp/{session}/v"):
+        makedirs(f"./.tmp/{session}/v")
+
+    # Make 'output' folder
     if not path.exists(f"./output/{session}/images"):
         makedirs(f"./output/{session}/images")
     if not path.exists(f"./output/{session}/videos"):
         makedirs(f"./output/{session}/videos")
 
+    print("START: Creating Video Embedding")
+    vemb.process(session=session, input=list_of_files)
+    print("FINISH")
+    exit()
     print("START: Creating Image Embedding")
-    emb.process(session=session, input=list_of_files)
+    iemb.process(session=session, input=list_of_files)
     print("FINISH")
 
     print("START: Grouping Images")

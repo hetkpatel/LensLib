@@ -20,20 +20,19 @@ def process(session, input):
         for i in input:
             file_list += _validate_source(i)
 
-        if not path.exists(f"./.tmp/{session}/vectors"):
-            makedirs(f"./.tmp/{session}/vectors")
+        if not path.exists(f"./.tmp/{session}/i/vectors"):
+            makedirs(f"./.tmp/{session}/i/vectors")
 
         model.eval()
         with torch.no_grad():
-            for file in tqdm(desc="Indexing vector database", iterable=file_list):
+            for file in tqdm(desc="Indexing image vector database", iterable=file_list):
                 # Transform images into tensors
-                img = Image.open(file)
-                t = ie.get_transforms()(img)
+                t = ie.get_transforms()(Image.open(file))
                 # Create embedding vector
                 vector = torch.squeeze(model(t.unsqueeze(0)))
-                # save vector in tmp session folder (TODO: use vector database)
+                # save vector in tmp session folder
                 id = uuid4().hex
-                torch.save(vector, f"./.tmp/{session}/vectors/{id}.pt")
+                torch.save(vector, f"./.tmp/{session}/i/vectors/{id}.pt")
                 # save id and file path in tmp session folder in json file
                 _save_id_to_file(session, id, path.abspath(file))
 
@@ -53,12 +52,12 @@ def _validate_source(source):
 
 def _save_id_to_file(session, id, filename):
     # check if embedding map file exists, if not create it
-    if not path.exists(f"./.tmp/{session}/embedding_map.json"):
-        with open(f"./.tmp/{session}/embedding_map.json", "w") as f:
+    if not path.exists(f"./.tmp/{session}/i/embedding_map.json"):
+        with open(f"./.tmp/{session}/i/embedding_map.json", "w") as f:
             dump({}, f)
 
-    with open(f"./.tmp/{session}/embedding_map.json", "r") as j:
+    with open(f"./.tmp/{session}/i/embedding_map.json", "r") as j:
         data = load(j)
         data[id] = filename
-        with open(f"./.tmp/{session}/embedding_map.json", "w") as f:
+        with open(f"./.tmp/{session}/i/embedding_map.json", "w") as f:
             dump(data, f)
